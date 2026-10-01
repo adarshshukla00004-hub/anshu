@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MargDarshak AI - AI-Powered Career Readiness & Employability Platform</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome for clean industry icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#1e1b4b',
+            },
+            mporange: '#f97316',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom styling for waveform and glassmorphism elements */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(229, 231, 235, 0.8);
+    }
+    
+    .wave-bar {
+      transition: height 0.1s ease-in-out;
+    }
+
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
+    }
+
+    .pulse-badge {
+      animation: pulse-subtle 2.5s infinite;
+    }
+    
+    /* Smooth custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- Top Global Navbar -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Logo & Hackathon Badge -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-mporange flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+            <i class="fa-solid fa-compass text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xl font-bold tracking-tight text-slate-900">Marg<span class="text-brand-600">Darshak</span><span class="text-mporange font-extrabold text-sm ml-0.5">AI</span></span>
+              <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wide bg-orange-100 text-orange-800 border border-orange-200 rounded-full">MPOnline Hackathon</span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden sm:block">AI Career Readiness & Employability Engine</p>
+          </div>
+        </div>
+
+        <!-- Role Selector & Quick User Profile -->
+        <div class="flex items-center space-x-4">
+          <div class="hidden md:flex flex-col text-right">
+            <span class="text-xs text-slate-400 font-medium">Targeted Role</span>
+            <select id="targetRoleSelect" onchange="handleRoleChange(this.value)" class="text-xs font-semibold text-brand-700 bg-brand-50 border border-brand-200 rounded-lg px-2.5 py-1 focus:ring-2 focus:ring-brand-500 outline-none cursor-pointer">
+              <option value="fullstack" selected>Full Stack Engineer</option>
+              <option value="datascience">Data Scientist & AI Specialist</option>
+              <option value="devops">Cloud & DevOps Architect</option>
+            </select>
+          </div>
+
+          <!-- User Pill -->
+          <div class="flex items-center space-x-2.5 pl-3 border-l border-slate-200">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+              AK
+            </div>
+            <div class="hidden lg:block text-left text-xs leading-tight">
+              <p class="font-bold text-slate-800">Aman Kumar</p>
+              <p class="text-[11px] text-slate-500">RGPV, Bhopal • 3rd Year</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex space-x-1 sm:space-x-4 overflow-x-auto py-2 border-t border-slate-100 text-sm font-medium text-slate-600">
+        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg text-brand-600 bg-brand-50 font-semibold transition">
+          <i class="fa-solid fa-chart-pie text-sm"></i>
+          <span>Dashboard</span>
+        </button>
+        <button onclick="switchTab('analyzer')" id="tab-analyzer" class="tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-file-shield text-sm"></i>
+          <span>Resume & Gap Analyzer</span>
+        </button>
+        <button onclick="switchTab('roadmap')" id="tab-roadmap" class="tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-route text-sm"></i>
+          <span>Career Roadmap</span>
+        </button>
+        <button onclick="switchTab('interview')" id="tab-interview" class="tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-headset text-sm"></i>
+          <span>AI Mock Interview</span>
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+        </button>
+        <button onclick="switchTab('jobs')" id="tab-jobs" class="tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-briefcase text-sm"></i>
+          <span>Job & Internship Matches</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Notification Toast Alert Box (Alert replacement) -->
+  <div id="toast" class="fixed top-20 right-5 z-50 hidden bg-slate-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl border border-slate-700 items-center space-x-3 transition-all duration-300">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-green-400"></i>
+    <span id="toastMsg">Action completed successfully</span>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: DIAGNOSTIC DASHBOARD               -->
+    <!-- ========================================== -->
+    <div id="view-dashboard" class="space-y-6">
+      
+      <!-- Welcome Banner -->
+      <div class="rounded-2xl bg-gradient-to-r from-brand-900 via-indigo-900 to-slate-900 p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-indigo-500/20 backdrop-blur-md border border-indigo-400/30 px-3 py-1 rounded-full text-xs font-medium text-indigo-200 mb-3">
+            <i class="fa-solid fa-sparkles text-amber-400"></i> State Employability Mission Pilot
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Diagnostic Career Overview</h1>
+          <p class="mt-2 text-sm sm:text-base text-slate-300">
+            Your readiness score is analyzed using live hiring data across Madhya Pradesh IT hubs and national tech standards. Follow your weekly roadmap to qualify for top-tier internships.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button onclick="switchTab('analyzer')" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 rounded-xl font-semibold text-xs text-white shadow-md transition flex items-center space-x-2">
+              <i class="fa-solid fa-upload"></i>
+              <span>Re-Analyze Resume</span>
+            </button>
+            <button onclick="switchTab('interview')" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-semibold text-xs text-white backdrop-blur-sm transition flex items-center space-x-2">
+              <i class="fa-solid fa-microphone"></i>
+              <span>Quick 3-Min Mock Drill</span>
+            </button>
+          </div>
+        </div>
+        <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-10 translate-y-10">
+          <i class="fa-solid fa-brain text-[260px] text-white"></i>
+        </div>
+      </div>
+
+      <!-- Key Diagnostic Metric Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- Score Card 1: Employability Index -->
+        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Employability Index</span>
+            <span class="p-2 rounded-xl bg-brand-50 text-brand-600"><i class="fa-solid fa-gauge-high"></i></span>
+          </div>
+          <div class="my-3 flex items-baseline space-x-2">
+            <span id="stat-readiness" class="text-3xl font-extrabold text-slate-900">74</span>
+            <span class="text-sm font-semibold text-slate-400">/ 100</span>
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full ml-auto">+6% this week</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2">
+            <div id="stat-readiness-bar" class="bg-gradient-to-r from-brand-500 to-indigo-600 h-2 rounded-full" style="width: 74%"></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">Market readiness threshold is 80+</p>
+        </div>
+
+        <!-- Score Card 2: ATS Match Score -->
+        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">ATS Resume Compatibility</span>
+            <span class="p-2 rounded-xl bg-purple-50 text-purple-600"><i class="fa-solid fa-file-lines"></i></span>
+          </div>
+          <div class="my-3 flex items-baseline space-x-2">
+            <span class="text-3xl font-extrabold text-slate-900">82%</span>
+            <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full ml-auto">Clean Format</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2">
+            <div class="bg-purple-600 h-2 rounded-full" style="width: 82%"></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">3 formatting suggestions remaining</p>
+        </div>
+
+        <!-- Score Card 3: Missing Critical Skills -->
+        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Critical Missing Skills</span>
+            <span class="p-2 rounded-xl bg-amber-50 text-amber-600"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          </div>
+          <div class="my-3 flex items-baseline space-x-2">
+            <span id="stat-missing" class="text-3xl font-extrabold text-amber-600">3</span>
+            <span class="text-xs text-slate-500">high-priority gaps</span>
+            <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full ml-auto">Docker, Redis, Cloud</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2">
+            <div class="bg-amber-500 h-2 rounded-full" style="width: 60%"></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">Included in current learning sprint</p>
+        </div>
+
+        <!-- Score Card 4: Roadmap Progress -->
+        <div class="glass-card p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Curated Roadmap Sprint</span>
+            <span class="p-2 rounded-xl bg-teal-50 text-teal-600"><i class="fa-solid fa-list-check"></i></span>
+          </div>
+          <div class="my-3 flex items-baseline space-x-2">
+            <span id="stat-completed-steps" class="text-3xl font-extrabold text-slate-900">4</span>
+            <span class="text-sm font-semibold text-slate-400">/ 8 Steps</span>
+            <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full ml-auto">Week 2 Active</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2">
+            <div id="stat-steps-bar" class="bg-teal-500 h-2 rounded-full" style="width: 50%"></div>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">Next: Build Containerized Microservice</p>
+        </div>
+
+      </div>
+
+      <!-- Skill Gap Benchmarking Table & Visual Chart -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Skill Comparison Chart / Bars -->
+        <div class="lg:col-span-2 glass-card p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Skill Competency vs Industry Benchmark</h2>
+              <p class="text-xs text-slate-500">Based on 1,450+ Junior Developer job postings in MP and Pan-India</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Role: Full Stack</span>
+          </div>
+
+          <div class="mt-5 space-y-4" id="skillComparisonList">
+            <!-- Dynamically populated or default standard fullstack bars -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Frontend (React, JavaScript, Tailwind)</span>
+                <span class="text-emerald-600">88% <span class="text-slate-400">(Required: 75%)</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-emerald-500 h-full rounded-full" style="width: 88%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Backend APIs (Node.js / Express / REST)</span>
+                <span class="text-emerald-600">76% <span class="text-slate-400">(Required: 80%)</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-indigo-500 h-full rounded-full" style="width: 76%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Database & Caching (PostgreSQL, MongoDB, Redis)</span>
+                <span class="text-amber-600">55% <span class="text-slate-400">(Required: 70%)</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-amber-500 h-full rounded-full" style="width: 55%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">DevOps & Containers (Docker, GitHub Actions, AWS)</span>
+                <span class="text-rose-500">32% <span class="text-slate-400">(Required: 65%)</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-rose-500 h-full rounded-full" style="width: 32%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">System Design & Best Coding Standards</span>
+                <span class="text-rose-500">40% <span class="text-slate-400">(Required: 60%)</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+                <div class="bg-rose-400 h-full rounded-full" style="width: 40%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <div class="flex items-center space-x-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Verified Ready</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Needs Refinement</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Critical Shortage</span>
+            </div>
+            <button onclick="switchTab('roadmap')" class="text-brand-600 font-bold hover:underline">View Roadmap Bridge &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Quick AI Recommended Action Card -->
+        <div class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-2 text-brand-600 font-semibold text-xs tracking-wider uppercase mb-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Next High-Impact Milestone</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 leading-snug">Dockerize a Multi-Container CRUD Application</h3>
+            <p class="text-xs text-slate-500 mt-2">
+              Industry recruiters in central India report a 42% higher callback rate for students with verified Docker & Redis projects on their GitHub.
+            </p>
+            
+            <div class="mt-4 p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <div class="flex items-center text-xs font-semibold text-slate-700">
+                <i class="fa-solid fa-clock text-brand-500 mr-2"></i> Est. Time: 3.5 Hours
+              </div>
+              <div class="flex items-center text-xs font-semibold text-slate-700">
+                <i class="fa-solid fa-arrow-trend-up text-emerald-500 mr-2"></i> Readiness Gain: +7 Points
+              </div>
+              <div class="flex items-center text-xs font-semibold text-slate-700">
+                <i class="fa-solid fa-graduation-cap text-indigo-500 mr-2"></i> Free Course: Docker in 2 Hours (freeCodeCamp)
+              </div>
+            </div>
+          </div>
+
+          <button onclick="switchTab('roadmap')" class="w-full mt-5 py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center space-x-2">
+            <span>Start Milestone Now</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 2: RESUME & SKILL GAP ANALYZER         -->
+    <!-- ========================================== -->
+    <div id="view-analyzer" class="hidden space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-slate-900">AI Resume Parser & Skill Gap Diagnostic</h2>
+          <p class="text-sm text-slate-500">Upload your PDF or select a demo archetype to benchmark skills against live ATS models.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-xs text-slate-500">Load Demo Profile:</span>
+          <button onclick="loadSampleResume('cs')" class="text-xs bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg font-medium transition">3rd Year CS</button>
+          <button onclick="loadSampleResume('ece')" class="text-xs bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg font-medium transition">ECE Pivot</button>
+          <button onclick="loadSampleResume('selftaught')" class="text-xs bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg font-medium transition">Self-Taught</button>
+        </div>
+      </div>
+
+      <!-- Upload Dropzone Area -->
+      <div class="bg-white border-2 border-dashed border-indigo-200 hover:border-brand-500 rounded-2xl p-8 text-center transition cursor-pointer relative" onclick="triggerSimulatedUpload()">
+        <input type="file" id="resumeFileInput" class="hidden" accept=".pdf,.docx,.txt" onchange="handleFileChosen(event)">
+        <div class="w-14 h-14 bg-indigo-50 text-brand-600 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-3 shadow-inner">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <h4 class="text-base font-bold text-slate-800">Drop your Resume PDF here or click to browse</h4>
+        <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Supports PDF, DOCX up to 10MB. Our engine runs zero-data-retention ATS text extraction.</p>
+        <div id="uploadStatusText" class="mt-3 text-xs font-semibold text-brand-600">Ready for diagnostic upload</div>
+      </div>
+
+      <!-- Extraction & Gap Comparison Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Column 1: Extracted Resume Entities -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-file-invoice text-indigo-500"></i>
+              Extracted Profile Data
+            </h3>
+            <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Parser: v2.4</span>
+          </div>
+
+          <div class="mt-4 space-y-4">
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Candidate</span>
+              <p id="parsedCandidateName" class="text-sm font-bold text-slate-800">Aman Kumar</p>
+              <p id="parsedEducation" class="text-xs text-slate-500">B.Tech in Computer Science, RGPV (CGPA: 8.2)</p>
+            </div>
+
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Detected Technologies</span>
+              <div id="parsedTechTags" class="flex flex-wrap gap-1.5 mt-2">
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">React.js</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">JavaScript (ES6+)</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">Node.js</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">Express</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">MongoDB</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">Tailwind CSS</span>
+                <span class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg">Git & GitHub</span>
+              </div>
+            </div>
+
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Extracted Projects</span>
+              <ul id="parsedProjectList" class="mt-2 space-y-2 text-xs text-slate-600">
+                <li class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                  <span class="font-bold text-slate-800 block">Campus Mess Feedback Portal</span>
+                  Built with MERN stack, authentication using JWT, deployed on Vercel.
+                </li>
+                <li class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                  <span class="font-bold text-slate-800 block">Weather Dashboard Web App</span>
+                  HTML5, Vanilla JS, OpenWeather API integration.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Gap Match against Selected Target Role -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-code-compare text-brand-600"></i>
+              Role Skill Match Matrix
+            </h3>
+            <span id="roleBadgeCurrent" class="text-[11px] bg-brand-50 text-brand-700 px-2 py-0.5 rounded font-semibold">Full Stack</span>
+          </div>
+
+          <div class="mt-4 space-y-4">
+            <div>
+              <div class="flex justify-between text-xs mb-1 font-semibold">
+                <span class="text-slate-600">Qualified Matched Skills</span>
+                <span class="text-emerald-600">6 Verified</span>
+              </div>
+              <div id="matchedSkillsList" class="flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> React.js</span>
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> JavaScript</span>
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> Node.js</span>
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> Express.js</span>
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> Git Versioning</span>
+                <span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md font-medium"><i class="fa-solid fa-check text-[10px] mr-1"></i> REST Architecture</span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <div class="flex justify-between text-xs mb-1 font-semibold">
+                <span class="text-slate-600">Missing / Deficient Skills</span>
+                <span class="text-rose-600">3 Crucial Gaps</span>
+              </div>
+              <div id="missingSkillsList" class="space-y-2">
+                <div class="flex items-center justify-between p-2 rounded-lg bg-rose-50 border border-rose-100 text-xs">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="font-bold text-slate-800">Docker Containerization</span>
+                  </div>
+                  <span class="px-1.5 py-0.5 bg-rose-200 text-rose-800 text-[10px] font-bold rounded">High Priority</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-rose-50 border border-rose-100 text-xs">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="font-bold text-slate-800">Redis In-Memory Caching</span>
+                  </div>
+                  <span class="px-1.5 py-0.5 bg-rose-200 text-rose-800 text-[10px] font-bold rounded">High Priority</span>
+                </div>
+                <div class="flex items-center justify-between p-2 rounded-lg bg-amber-50 border border-amber-100 text-xs">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="font-bold text-slate-800">TypeScript Fundamentals</span>
+                  </div>
+                  <span class="px-1.5 py-0.5 bg-amber-200 text-amber-800 text-[10px] font-bold rounded">Medium Priority</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: ATS Scorecard & Actionable Fixes -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-emerald-500"></i>
+              ATS Recommendations
+            </h3>
+            <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">82% Pass</span>
+          </div>
+
+          <div class="mt-4 space-y-3 text-xs">
+            <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl">
+              <div class="flex items-center font-bold text-amber-900 mb-1">
+                <i class="fa-solid fa-circle-exclamation mr-1.5 text-amber-600"></i> Quantify Project Impact
+              </div>
+              <p class="text-amber-800 leading-relaxed">
+                Add metrics to project descriptions (e.g., "Handled 500+ requests/min" or "Reduced query latency by 35%").
+              </p>
+            </div>
+
+            <div class="p-3 bg-indigo-50/70 border border-indigo-200 rounded-xl">
+              <div class="flex items-center font-bold text-indigo-900 mb-1">
+                <i class="fa-solid fa-cloud mr-1.5 text-indigo-600"></i> Live Deployment Links Missing
+              </div>
+              <p class="text-indigo-800 leading-relaxed">
+                Include live working URLs or GitHub repo links for both listed academic projects.
+              </p>
+            </div>
+
+            <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl">
+              <div class="flex items-center font-bold text-emerald-900 mb-1">
+                <i class="fa-solid fa-circle-check mr-1.5 text-emerald-600"></i> Strong Section Hierarchy
+              </div>
+              <p class="text-emerald-800 leading-relaxed">
+                Standard headings (Education, Experience, Projects) detected cleanly without nested table parsing errors.
+              </p>
+            </div>
+
+            <button onclick="switchTab('roadmap')" class="w-full mt-2 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition flex items-center justify-center space-x-2">
+              <span>Generate Custom Upskill Plan</span>
+              <i class="fa-solid fa-bolt text-amber-400"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 3: DYNAMIC CAREER ROADMAP              -->
+    <!-- ========================================== -->
+    <div id="view-roadmap" class="hidden space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+            <i class="fa-solid fa-sitemap"></i> AI Milestone Engine
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Personalized 4-Week Employability Sprint</h2>
+          <p class="text-sm text-slate-500">Each module provides free curated resources and a hands-on project to demonstrate competence.</p>
+        </div>
+
+        <!-- Filter / Progress Badge -->
+        <div class="bg-white border border-slate-200 px-4 py-2 rounded-xl flex items-center space-x-3 shadow-sm">
+          <div class="text-right">
+            <span class="text-xs text-slate-400 block">Total Completed</span>
+            <span id="roadmapHeaderProgress" class="text-sm font-bold text-brand-600">3 of 8 Tasks (37%)</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-600 font-bold text-xs">
+            <i class="fa-solid fa-flag-checkered"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmap Timeline Container -->
+      <div class="space-y-6 relative before:absolute before:inset-0 before:left-5 md:before:left-8 before:w-0.5 before:bg-indigo-100 before:z-0">
+        
+        <!-- Week 1: Advanced APIs & SQL Optimization -->
+        <div class="relative z-10 pl-12 md:pl-16">
+          <div class="absolute left-3 md:left-6 -translate-x-1/2 top-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-md">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div class="glass-card p-5 rounded-2xl border border-slate-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div>
+                <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Week 1 • Completed</span>
+                <h3 class="text-base font-bold text-slate-900">Advanced REST Architecture & SQL Indexing</h3>
+              </div>
+              <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-semibold self-start sm:self-auto">+10 ERI Points</span>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="flex items-start space-x-3 p-2 rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" checked disabled class="mt-1 h-4 w-4 text-emerald-600 rounded">
+                  <div class="text-xs">
+                    <span class="font-bold text-slate-800 line-through">Database Normalization & Query Tuning</span>
+                    <p class="text-slate-500">Learned indexing and transaction isolation levels in PostgreSQL.</p>
+                  </div>
+                </label>
+                <label class="flex items-start space-x-3 p-2 rounded-lg bg-slate-50 cursor-pointer">
+                  <input type="checkbox" checked disabled class="mt-1 h-4 w-4 text-emerald-600 rounded">
+                  <div class="text-xs">
+                    <span class="font-bold text-slate-800 line-through">JWT Authentication & Rate Limiting</span>
+                    <p class="text-slate-500">Implemented token refresh rotations in Node.js.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Curated Link & Capstone Mini-Project -->
+              <div class="bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100 text-xs">
+                <div class="font-bold text-indigo-900 mb-1 flex items-center gap-1.5">
+                  <i class="fa-solid fa-code text-indigo-600"></i> Milestone Project Completed
+                </div>
+                <p class="text-slate-600 mb-2">Built: High-throughput Book Review API with PostgreSQL indexing.</p>
+                <a href="https://github.com" target="_blank" class="text-indigo-600 font-bold hover:underline inline-flex items-center gap-1">
+                  <i class="fa-brands fa-github"></i> View Verified Submission &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 2: Containerization & Docker (Current Active) -->
+        <div class="relative z-10 pl-12 md:pl-16">
+          <div class="absolute left-3 md:left-6 -translate-x-1/2 top-1 w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs shadow-lg pulse-badge">
+            <i class="fa-solid fa-circle-dot"></i>
+          </div>
+          <div class="glass-card p-5 rounded-2xl border-2 border-brand-500 shadow-md">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div>
+                <span class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">Week 2 • Current Sprint</span>
+                <h3 class="text-base font-bold text-slate-900">Docker Containerization & Multi-Service Orchestration</h3>
+              </div>
+              <span class="text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full font-semibold self-start sm:self-auto">+12 ERI Points</span>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="flex items-start space-x-3 p-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+                  <input type="checkbox" id="task-docker-1" checked onchange="toggleRoadmapTask('task-docker-1', 4)" class="mt-1 h-4 w-4 text-brand-600 rounded">
+                  <div class="text-xs">
+                    <span class="font-bold text-slate-800">Dockerfile & Multi-stage builds</span>
+                    <p class="text-slate-500">Optimize Node.js application image size below 120MB.</p>
+                  </div>
+                </label>
+                <label class="flex items-start space-x-3 p-2 rounded-lg bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+                  <input type="checkbox" id="task-docker-2" onchange="toggleRoadmapTask('task-docker-2', 4)" class="mt-1 h-4 w-4 text-brand-600 rounded">
+                  <div class="text-xs">
+                    <span class="font-bold text-slate-800">Docker Compose for Fullstack Setup</span>
+                    <p class="text-slate-500">Link Frontend, Backend, and MongoDB container network.</p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Resources & Recommended Challenge -->
+              <div class="bg-brand-50/50 p-3.5 rounded-xl border border-brand-100 text-xs">
+                <div class="font-bold text-brand-900 mb-1 flex items-center gap-1.5">
+                  <i class="fa-solid fa-laptop-code text-brand-600"></i> Free Curated Materials
+                </div>
+                <div class="space-y-1 mb-2 text-slate-600">
+                  <div>• <a href="https://www.freecodecamp.org" target="_blank" class="text-brand-600 underline font-medium">freeCodeCamp Docker Course (2h 15m)</a></div>
+                  <div>• <a href="https://nptel.ac.in" target="_blank" class="text-brand-600 underline font-medium">NPTEL Cloud Computing: Module 4</a></div>
+                </div>
+                <button onclick="showToast('Verification sandbox starting in background...', 'info')" class="mt-1 px-3 py-1.5 bg-brand-600 text-white rounded-lg font-bold text-[11px] hover:bg-brand-700 transition">
+                  Submit Repo for Automated AI Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 3: In-Memory Caching & Redis -->
+        <div class="relative z-10 pl-12 md:pl-16">
+          <div class="absolute left-3 md:left-6 -translate-x-1/2 top-1 w-6 h-6 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div class="glass-card p-5 rounded-2xl border border-slate-200 opacity-90">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Week 3 • Locked (Complete Week 2)</span>
+                <h3 class="text-base font-bold text-slate-700">Redis In-Memory Caching & Session Management</h3>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-semibold self-start sm:self-auto">+8 ERI Points</span>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-500">
+              <div class="space-y-1.5">
+                <p>• Redis Data structures (Strings, Hashes, Sorted Sets)</p>
+                <p>• Cache-aside pattern & TTL cache invalidation strategy</p>
+                <p>• Fast API response time benchmarks with Redis cache</p>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <span class="font-bold text-slate-700 block mb-1">Upcoming Capstone Project:</span>
+                Real-time Live Leaderboard & Cache Layer for E-Commerce Catalog.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Week 4: Cloud Deployments & CI/CD -->
+        <div class="relative z-10 pl-12 md:pl-16">
+          <div class="absolute left-3 md:left-6 -translate-x-1/2 top-1 w-6 h-6 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div class="glass-card p-5 rounded-2xl border border-slate-200 opacity-90">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Week 4 • Capstone Final</span>
+                <h3 class="text-base font-bold text-slate-700">CI/CD Pipeline with GitHub Actions & AWS/Render Deployment</h3>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-semibold self-start sm:self-auto">+10 ERI Points</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-3">
+              Automated linting, unit tests, and continuous delivery to cloud instances with environment configuration secrets.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 4: AI MOCK INTERVIEW SUITE             -->
+    <!-- ========================================== -->
+    <div id="view-interview" class="hidden space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+            <i class="fa-solid fa-microphone-lines"></i> Interactive AI Assessment Room
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Real-Time Technical Mock Drill</h2>
+          <p class="text-sm text-slate-500">Practice questions generated from your target role. Receive instant evaluation on technical depth and communication.</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <span class="text-xs text-slate-500 font-medium">Difficulty Level:</span>
+          <span class="px-2.5 py-1 rounded-lg bg-indigo-100 text-indigo-800 text-xs font-bold">Junior / Associate</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Question & Input Panel (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- Question Box -->
+          <div class="glass-card p-6 rounded-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span id="interviewQuestionNumber" class="text-xs font-bold text-brand-600 uppercase tracking-wider">Question 2 of 5</span>
+              <button onclick="readQuestionAloud()" class="text-xs text-slate-600 hover:text-brand-600 font-semibold flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-volume-high"></i> Listen to AI
+              </button>
+            </div>
+
+            <div class="mt-4">
+              <h3 id="currentQuestionText" class="text-lg font-bold text-slate-900 leading-snug">
+                "Explain the difference between SQL and NoSQL databases. In what scenario would you choose MongoDB over PostgreSQL for a student project?"
+              </h3>
+              <p class="text-xs text-slate-400 mt-2">Target Skills Evaluated: Database Architecture, Scalability, Trade-off Reasoning</p>
+            </div>
+          </div>
+
+          <!-- Answer Input with Simulated Voice Recording -->
+          <div class="glass-card p-6 rounded-2xl border border-slate-200">
+            <div class="flex items-center justify-between mb-3">
+              <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Your Answer</label>
+              <div class="flex items-center space-x-3">
+                <span id="recordingTimer" class="text-xs font-mono text-slate-400">00:00</span>
+                <button id="micBtn" onclick="toggleVoiceRecording()" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center gap-1.5 transition">
+                  <i class="fa-solid fa-microphone text-rose-500"></i>
+                  <span id="micBtnText">Record Voice</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Waveform Animation Simulation (when active) -->
+            <div id="waveformContainer" class="hidden h-10 bg-slate-900 rounded-xl px-4 flex items-center justify-center space-x-1.5 mb-3">
+              <div class="w-1.5 h-3 bg-indigo-400 rounded-full wave-bar animate-pulse"></div>
+              <div class="w-1.5 h-6 bg-brand-400 rounded-full wave-bar animate-bounce"></div>
+              <div class="w-1.5 h-8 bg-purple-400 rounded-full wave-bar animate-pulse"></div>
+              <div class="w-1.5 h-4 bg-emerald-400 rounded-full wave-bar animate-bounce"></div>
+              <div class="w-1.5 h-7 bg-amber-400 rounded-full wave-bar animate-pulse"></div>
+              <div class="w-1.5 h-3 bg-indigo-400 rounded-full wave-bar animate-bounce"></div>
+              <span class="text-xs font-medium text-slate-300 ml-3">Listening to microphone input...</span>
+            </div>
+
+            <textarea id="candidateAnswerText" rows="6" placeholder="Type your answer here or click 'Record Voice' to simulate speech-to-text..." class="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-xl p-3.5 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none leading-relaxed transition resize-none"></textarea>
+
+            <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <button onclick="fillSampleGoodAnswer()" class="text-xs text-brand-600 hover:underline font-semibold">
+                Insert Sample Strong Candidate Response
+              </button>
+              <div class="flex items-center space-x-2 w-full sm:w-auto">
+                <button onclick="nextInterviewQuestion()" class="flex-1 sm:flex-none px-4 py-2 border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition">
+                  Skip
+                </button>
+                <button onclick="evaluateInterviewAnswer()" id="evaluateBtn" class="flex-1 sm:flex-none px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center space-x-2">
+                  <i class="fa-solid fa-brain"></i>
+                  <span>AI Score Answer</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Real-Time Scorecard Panel (5 cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          
+          <div class="glass-card p-6 rounded-2xl border border-slate-200" id="feedbackCard">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-brand-600"></i>
+                AI Evaluation Scorecard
+              </h3>
+              <span id="scorecardStatus" class="text-xs bg-slate-100 text-slate-500 px-2.5 py-0.5 rounded-full font-medium">Awaiting Answer</span>
+            </div>
+
+            <!-- Empty / Default Placeholder -->
+            <div id="feedbackPlaceholder" class="py-12 text-center text-slate-400">
+              <i class="fa-solid fa-robot text-4xl text-slate-300 mb-2"></i>
+              <p class="text-xs">Submit an answer or record speech to generate an AI evaluation scorecard.</p>
+            </div>
+
+            <!-- Dynamic Evaluation Results -->
+            <div id="evaluationResults" class="hidden mt-4 space-y-4">
+              
+              <!-- Metrics Grid -->
+              <div class="grid grid-cols-2 gap-3">
+                <div class="p-3 bg-brand-50 rounded-xl border border-brand-100 text-center">
+                  <span class="text-[11px] font-bold text-brand-600 uppercase">Technical Depth</span>
+                  <div id="scoreTechnical" class="text-2xl font-extrabold text-brand-900 mt-0.5">8.5/10</div>
+                </div>
+                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-center">
+                  <span class="text-[11px] font-bold text-emerald-600 uppercase">Clarity & Tone</span>
+                  <div id="scoreClarity" class="text-2xl font-extrabold text-emerald-900 mt-0.5">9.0/10</div>
+                </div>
+              </div>
+
+              <!-- Keywords Used -->
+              <div>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Detected Critical Keywords</span>
+                <div id="scoreKeywords" class="flex flex-wrap gap-1 mt-1.5">
+                  <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">Schema Flexibility</span>
+                  <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">ACID Compliance</span>
+                  <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded text-xs font-semibold">Horizontal Scaling</span>
+                </div>
+              </div>
+
+              <!-- Constructive Coaching Feedback -->
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                <span class="font-bold text-slate-800 block mb-1">AI Coach Suggestions:</span>
+                <p id="scoreFeedbackSummary" class="text-slate-600 leading-relaxed">
+                  Strong conceptual definition! To elevate this response to an enterprise level, explicitly cite indexing differences (B-Tree vs Hash index) and mention ACID guarantees in relational systems.
+                </p>
+              </div>
+
+              <!-- Ideal Model Answer -->
+              <div class="p-3.5 bg-indigo-50/60 rounded-xl border border-indigo-100 text-xs">
+                <span class="font-bold text-indigo-900 block mb-1">Sample Model Answer:</span>
+                <p class="text-indigo-950 leading-relaxed italic">
+                  "SQL databases are relational with predefined schemas and strict ACID guarantees, ideal for financial integrity. NoSQL like MongoDB offers schema flexibility and document storage, ideal for rapidly evolving prototypes or hierarchical JSON payloads."
+                </p>
+              </div>
+
+              <button onclick="nextInterviewQuestion()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2">
+                <span>Continue to Next Question (3 of 5)</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- TAB 5: REGIONAL JOBS & INTERNSHIPS         -->
+    <!-- ========================================== -->
+    <div id="view-jobs" class="hidden space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+            <i class="fa-solid fa-location-dot"></i> Regional & Pan-India Matching
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Verified Opportunities Matched to Your Profile</h2>
+          <p class="text-sm text-slate-500">Curated opportunities matched against your Employability Index (74/100).</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex items-center space-x-2">
+          <button onclick="filterOpportunities('all')" class="job-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-600 text-white">All (14)</button>
+          <button onclick="filterOpportunities('mp')" class="job-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">Madhya Pradesh Hubs (Indore/Bhopal)</button>
+          <button onclick="filterOpportunities('remote')" class="job-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">Remote</button>
+        </div>
+      </div>
+
+      <!-- Opportunities Listing Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="jobsGrid">
+        
+        <!-- Card 1 -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-brand-300 transition flex flex-col justify-between" data-location="mp">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-700 text-white flex items-center justify-center font-extrabold text-lg">
+                  TI
+                </div>
+                <div>
+                  <h3 class="font-bold text-base text-slate-900">Junior Full Stack Developer Intern</h3>
+                  <p class="text-xs text-slate-500">TechIndore Labs • Indore, MP (Hybrid)</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold">85% Match</span>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">React</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Node.js</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">PostgreSQL</span>
+              <span class="px-2 py-0.5 bg-rose-50 text-rose-700 font-semibold rounded text-xs border border-rose-200">Missing: Docker</span>
+            </div>
+
+            <div class="mt-4 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs text-slate-600">
+              <span><i class="fa-solid fa-money-bill-wave text-emerald-600 mr-1.5"></i> ₹18,000 - ₹25,000 / mo</span>
+              <span><i class="fa-solid fa-calendar mr-1.5"></i> 6 Months (PPO Available)</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+            <button onclick="bridgeModal('Docker')" class="text-xs text-brand-600 hover:underline font-bold flex items-center gap-1">
+              <i class="fa-solid fa-sparkles"></i> Bridge 15% Gap
+            </button>
+            <button onclick="applyJob('TechIndore Labs')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+              1-Click Apply via MargDarshak
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-brand-300 transition flex flex-col justify-between" data-location="mp">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-600 text-white flex items-center justify-center font-extrabold text-lg">
+                  MP
+                </div>
+                <div>
+                  <h3 class="font-bold text-base text-slate-900">Backend API Apprentice</h3>
+                  <p class="text-xs text-slate-500">MP E-Governance State Center • Bhopal, MP</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold">92% Match</span>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Express.js</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">REST APIs</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">MongoDB</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-semibold rounded text-xs">All Core Skills Met</span>
+            </div>
+
+            <div class="mt-4 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs text-slate-600">
+              <span><i class="fa-solid fa-money-bill-wave text-emerald-600 mr-1.5"></i> ₹15,000 Govt Stipend</span>
+              <span><i class="fa-solid fa-shield-halved text-brand-600 mr-1.5"></i> Govt Certified Experience</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+            <span class="text-xs text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> Ready to Apply</span>
+            <button onclick="applyJob('MP E-Governance Center')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+              Apply with ERI Scorecard
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-brand-300 transition flex flex-col justify-between" data-location="remote">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center font-extrabold text-lg">
+                  NX
+                </div>
+                <div>
+                  <h3 class="font-bold text-base text-slate-900">React Frontend Engineer (Trainee)</h3>
+                  <p class="text-xs text-slate-500">NexGen Cloud Solutions • Remote (India)</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-extrabold">88% Match</span>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">React.js</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Tailwind CSS</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Next.js Basics</span>
+              <span class="px-2 py-0.5 bg-amber-50 text-amber-700 font-semibold rounded text-xs border border-amber-200">Missing: TypeScript</span>
+            </div>
+
+            <div class="mt-4 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs text-slate-600">
+              <span><i class="fa-solid fa-money-bill-wave text-emerald-600 mr-1.5"></i> ₹22,000 / mo</span>
+              <span><i class="fa-solid fa-house-laptop mr-1.5"></i> 100% Work from Home</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+            <button onclick="bridgeModal('TypeScript')" class="text-xs text-brand-600 hover:underline font-bold flex items-center gap-1">
+              <i class="fa-solid fa-sparkles"></i> Bridge 12% Gap
+            </button>
+            <button onclick="applyJob('NexGen Cloud Solutions')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+              Apply via MargDarshak
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-brand-300 transition flex flex-col justify-between" data-location="mp">
+          <div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-700 text-white flex items-center justify-center font-extrabold text-lg">
+                  SV
+                </div>
+                <div>
+                  <h3 class="font-bold text-base text-slate-900">Junior DevOps & Cloud Associate</h3>
+                  <p class="text-xs text-slate-500">SmartVision Analytics • Bhopal IT Park, MP</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold">64% Match</span>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Linux</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs">Git</span>
+              <span class="px-2 py-0.5 bg-rose-50 text-rose-700 font-semibold rounded text-xs border border-rose-200">Missing: AWS</span>
+              <span class="px-2 py-0.5 bg-rose-50 text-rose-700 font-semibold rounded text-xs border border-rose-200">Missing: Docker</span>
+            </div>
+
+            <div class="mt-4 p-3 bg-slate-50 rounded-xl flex items-center justify-between text-xs text-slate-600">
+              <span><i class="fa-solid fa-money-bill-wave text-emerald-600 mr-1.5"></i> ₹20,000 - ₹30,000 / mo</span>
+              <span><i class="fa-solid fa-location-dot mr-1.5"></i> IT Park, Bhopal</span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+            <button onclick="switchTab('roadmap')" class="text-xs text-brand-600 hover:underline font-bold flex items-center gap-1">
+              <i class="fa-solid fa-route"></i> Complete Week 2 & 4 to Qualify
+            </button>
+            <button onclick="showToast('Readiness score too low (min 75% required). Follow roadmap first!', 'warning')" class="px-4 py-2 bg-slate-200 text-slate-500 rounded-xl text-xs font-bold cursor-not-allowed">
+              Locked (64%)
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Skill Bridge Details Modal -->
+  <div id="bridgeModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-md w-full rounded-2xl p-6 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in duration-200">
+      <button onclick="closeBridgeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl mb-4">
+        <i class="fa-solid fa-sparkles"></i>
+      </div>
+
+      <h3 class="text-lg font-bold text-slate-900">Bridge Skill: <span id="modalSkillName" class="text-brand-600">Docker</span></h3>
+      <p class="text-xs text-slate-500 mt-1">Completing this fast-track module bridges the gap required for this job opening.</p>
+
+      <div class="mt-4 space-y-3">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+          <span class="text-xs font-bold text-slate-800 block">Recommended Action:</span>
+          <p class="text-xs text-slate-600 mt-0.5">Build a single Dockerfile, publish it to Docker Hub, and paste the URL into your MargDarshak profile.</p>
+        </div>
+
+        <div class="p-3 bg-brand-50/60 rounded-xl border border-brand-100">
+          <span class="text-xs font-bold text-brand-900 block">Curated Resource (Free):</span>
+          <p class="text-xs text-brand-700 mt-0.5">freeCodeCamp 1-hour Beginner Docker Crash Course</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex space-x-2">
+        <button onclick="switchTab('roadmap'); closeBridgeModal();" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition">
+          Add to Roadmap Sprint
+        </button>
+        <button onclick="closeBridgeModal()" class="px-4 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-50 transition">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-slate-800">MargDarshak AI</span>
+        <span>•</span>
+        <span>MPOnline Idea & Innovation Hackathon Challenge 1</span>
+      </div>
+      <div>
+        Empowering higher education graduates into industry-ready software talent.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Application Global State
+    const appState = {
+      currentTab: 'dashboard',
+      targetRole: 'fullstack',
+      readinessScore: 74,
+      missingCount: 3,
+      completedSteps: 3,
+      totalSteps: 8,
+      isRecording: false,
+      recordingTimerInterval: null,
+      recordingSeconds: 0,
+      currentInterviewIndex: 0
+    };
+
+    // Interview Questions Database
+    const interviewQuestions = [
+      {
+        question: "Explain the difference between SQL and NoSQL databases. In what scenario would you choose MongoDB over PostgreSQL for a student project?",
+        targetSkills: "Database Architecture, Scalability, Trade-off Reasoning",
+        goodAnswer: "SQL databases like PostgreSQL are relational, structured with predefined schemas, and enforce strict ACID compliance, which makes them critical for transactional systems like financial ledgers. NoSQL databases like MongoDB are document-oriented and schemaless, storing JSON documents. For a student prototype with rapidly changing schema requirements or unstructured nested payloads, MongoDB allows much faster iterations without schema migration overhead."
+      },
+      {
+        question: "What happens under the hood when a user types a URL into their browser and presses Enter?",
+        targetSkills: "Networking, DNS, HTTP, Browser Rendering Engine",
+        goodAnswer: "The browser performs DNS resolution to convert the hostname to an IP address (checking browser cache, OS cache, and recursive resolvers). Then a TCP 3-way handshake is initiated, followed by TLS negotiation for HTTPS. The browser dispatches an HTTP GET request, the server returns the HTML response, and the browser parses the DOM and CSSOM to build the render tree and paint pixels."
+      },
+      {
+        question: "How does asynchronous programming work in JavaScript, and what is the role of the Event Loop?",
+        targetSkills: "JavaScript Engine, Concurrency, Event Loop, Microtask Queue",
+        goodAnswer: "JavaScript is single-threaded with a call stack. Asynchronous operations like fetch or setTimeout are handled by Web APIs in the browser or libuv in Node.js. When complete, their callbacks enter the Task Queue or Microtask Queue (Promises). The Event Loop continually monitors the call stack; once it is completely clear, it pushes microtasks first, then macro-tasks onto the stack to execute."
+      }
+    ];
+
+    // Role-specific definitions
+    const roleProfiles = {
+      fullstack: {
+        title: "Full Stack Engineer",
+        readiness: 74,
+        missing: 3,
+        skillsMatched: ["React.js", "JavaScript", "Node.js", "Express.js", "Git Versioning", "REST Architecture"],
+        skillsMissing: [
+          { name: "Docker Containerization", priority: "High Priority", color: "rose" },
+          { name: "Redis In-Memory Caching", priority: "High Priority", color: "rose" },
+          { name: "TypeScript Fundamentals", priority: "Medium Priority", color: "amber" }
+        ]
+      },
+      datascience: {
+        title: "Data Scientist & AI Specialist",
+        readiness: 62,
+        missing: 4,
+        skillsMatched: ["Python", "Pandas", "SQL Basics", "Git", "NumPy"],
+        skillsMissing: [
+          { name: "Vector Databases & RAG", priority: "High Priority", color: "rose" },
+          { name: "PyTorch Deep Learning", priority: "High Priority", color: "rose" },
+          { name: "FastAPI Model Serving", priority: "Medium Priority", color: "amber" },
+          { name: "Feature Engineering", priority: "Medium Priority", color: "amber" }
+        ]
+      },
+      devops: {
+        title: "Cloud & DevOps Architect",
+        readiness: 58,
+        missing: 5,
+        skillsMatched: ["Linux Shell Scripting", "Git", "Basic Networking", "Python"],
+        skillsMissing: [
+          { name: "Kubernetes Orchestration", priority: "High Priority", color: "rose" },
+          { name: "Terraform (IaC)", priority: "High Priority", color: "rose" },
+          { name: "AWS IAM & VPC Design", priority: "High Priority", color: "rose" },
+          { name: "CI/CD Pipeline Automation", priority: "Medium Priority", color: "amber" }
+        ]
+      }
+    };
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      const views = ['dashboard', 'analyzer', 'roadmap', 'interview', 'jobs'];
+      
+      views.forEach(v => {
+        const viewElem = document.getElementById(`view-${v}`);
+        const tabBtn = document.getElementById(`tab-${v}`);
+        
+        if (v === tabId) {
+          viewElem.classList.remove('hidden');
+          tabBtn.className = "tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg text-brand-600 bg-brand-50 font-semibold transition";
+        } else {
+          viewElem.classList.add('hidden');
+          tabBtn.className = "tab-btn flex items-center space-x-2 px-3.5 py-2 rounded-lg hover:text-slate-900 hover:bg-slate-100 transition";
+        }
+      });
+
+      appState.currentTab = tabId;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Role Switching
+    function handleRoleChange(selectedRole) {
+      appState.targetRole = selectedRole;
+      const data = roleProfiles[selectedRole];
+      
+      appState.readinessScore = data.readiness;
+      appState.missingCount = data.missing;
+
+      // Update Dashboard elements
+      document.getElementById('stat-readiness').innerText = data.readiness;
+      document.getElementById('stat-readiness-bar').style.width = data.readiness + '%';
+      document.getElementById('stat-missing').innerText = data.missing;
+      document.getElementById('roleBadgeCurrent').innerText = data.title;
+
+      // Update Analyzer Missing List
+      const missingContainer = document.getElementById('missingSkillsList');
+      missingContainer.innerHTML = '';
+      data.skillsMissing.forEach(skill => {
+        const div = document.createElement('div');
+        div.className = `flex items-center justify-between p-2 rounded-lg bg-${skill.color}-50 border border-${skill.color}-100 text-xs`;
+        div.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-${skill.color}-500"></span>
+            <span class="font-bold text-slate-800">${skill.name}</span>
+          </div>
+          <span class="px-1.5 py-0.5 bg-${skill.color}-200 text-${skill.color}-800 text-[10px] font-bold rounded">${skill.priority}</span>
+        `;
+        missingContainer.appendChild(div);
+      });
+
+      showToast(`Switched target role to ${data.title}. Benchmark recalculated.`, 'success');
+    }
+
+    // Simulated Resume Upload
+    function triggerSimulatedUpload() {
+      document.getElementById('resumeFileInput').click();
+    }
+
+    function handleFileChosen(event) {
+      if (event.target.files && event.target.files[0]) {
+        const fileName = event.target.files[0].name;
+        document.getElementById('uploadStatusText').innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Parsing "${fileName}" with AI...`;
+        
+        setTimeout(() => {
+          document.getElementById('uploadStatusText').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Analyzed: "${fileName}" (ATS Score: 85%)`;
+          showToast(`Successfully extracted skills & education from ${fileName}`, 'success');
+        }, 1200);
+      }
+    }
+
+    // Load Sample Resumes
+    function loadSampleResume(type) {
+      if (type === 'cs') {
+        document.getElementById('parsedCandidateName').innerText = "Aman Kumar";
+        document.getElementById('parsedEducation').innerText = "B.Tech in Computer Science, RGPV (CGPA: 8.2)";
+        document.getElementById('uploadStatusText').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Loaded Archetype: 3rd Year CS Student`;
+        showToast("Loaded 3rd Year CS Student sample resume", "info");
+      } else if (type === 'ece') {
+        document.getElementById('parsedCandidateName').innerText = "Pooja Sharma";
+        document.getElementById('parsedEducation').innerText = "B.Tech in Electronics & Comm., MANIT Bhopal (CGPA: 7.9)";
+        document.getElementById('uploadStatusText').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Loaded Archetype: ECE Pivot to Software`;
+        showToast("Loaded ECE Student profile", "info");
+      } else {
+        document.getElementById('parsedCandidateName').innerText = "Rohit Verma";
+        document.getElementById('parsedEducation').innerText = "B.Sc Mathematics + Self Taught Fullstack (Online)";
+        document.getElementById('uploadStatusText').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Loaded Archetype: Self-Taught Dev`;
+        showToast("Loaded Self-Taught Developer profile", "info");
+      }
+    }
+
+    // Interactive Roadmap Task Completion
+    function toggleRoadmapTask(taskId, weight) {
+      const checkbox = document.getElementById(taskId);
+      if (checkbox.checked) {
+        appState.readinessScore = Math.min(100, appState.readinessScore + weight);
+        appState.completedSteps = Math.min(8, appState.completedSteps + 1);
+        showToast(`Milestone completed! +${weight} points to Readiness Index!`, 'success');
+      } else {
+        appState.readinessScore = Math.max(0, appState.readinessScore - weight);
+        appState.completedSteps = Math.max(0, appState.completedSteps - 1);
+      }
+
+      // Update UI Counters
+      document.getElementById('stat-readiness').innerText = appState.readinessScore;
+      document.getElementById('stat-readiness-bar').style.width = appState.readinessScore + '%';
+      document.getElementById('stat-completed-steps').innerText = appState.completedSteps;
+      document.getElementById('stat-steps-bar').style.width = ((appState.completedSteps / 8) * 100) + '%';
+      document.getElementById('roadmapHeaderProgress').innerText = `${appState.completedSteps} of 8 Tasks (${Math.round((appState.completedSteps/8)*100)}%)`;
+    }
+
+    // AI Mock Interview Voice Simulation
+    function toggleVoiceRecording() {
+      const micBtn = document.getElementById('micBtn');
+      const micText = document.getElementById('micBtnText');
+      const waveform = document.getElementById('waveformContainer');
+      const timerElem = document.getElementById('recordingTimer');
+
+      if (!appState.isRecording) {
+        // Start recording
+        appState.isRecording = true;
+        waveform.classList.remove('hidden');
+        micBtn.classList.add('bg-rose-100', 'text-rose-700');
+        micText.innerText = 'Stop Recording';
+        appState.recordingSeconds = 0;
+
+        appState.recordingTimerInterval = setInterval(() => {
+          appState.recordingSeconds++;
+          const mins = String(Math.floor(appState.recordingSeconds / 60)).padStart(2, '0');
+          const secs = String(appState.recordingSeconds % 60).padStart(2, '0');
+          timerElem.innerText = `${mins}:${secs}`;
+        }, 1000);
+
+        showToast("Microphone active. Simulating speech-to-text input...", "info");
+      } else {
+        // Stop recording
+        appState.isRecording = false;
+        waveform.classList.add('hidden');
+        micBtn.classList.remove('bg-rose-100', 'text-rose-700');
+        micText.innerText = 'Record Voice';
+        clearInterval(appState.recordingTimerInterval);
+
+        // Populate realistic transcribed text if empty
+        const textarea = document.getElementById('candidateAnswerText');
+        if (!textarea.value.trim()) {
+          textarea.value = "In my understanding, SQL databases have rigid tabular schemas with ACID properties, while NoSQL like MongoDB allows document-based dynamic structure. I would choose MongoDB for rapid prototyping where relations are not deeply interconnected.";
+        }
+        showToast("Voice recorded and transcribed into answer box!", "success");
+      }
+    }
+
+    // Fill sample good response for easy hackathon demo
+    function fillSampleGoodAnswer() {
+      const q = interviewQuestions[appState.currentInterviewIndex];
+      document.getElementById('candidateAnswerText').value = q.goodAnswer;
+      showToast("Pasted strong candidate benchmark answer.", "info");
+    }
+
+    // Evaluate Interview Answer
+    function evaluateInterviewAnswer() {
+      const text = document.getElementById('candidateAnswerText').value.trim();
+      if (!text) {
+        showToast("Please provide or record an answer first!", "warning");
+        return;
+      }
+
+      const evalBtn = document.getElementById('evaluateBtn');
+      evalBtn.disabled = true;
+      evalBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scoring...`;
+
+      setTimeout(() => {
+        document.getElementById('feedbackPlaceholder').classList.add('hidden');
+        document.getElementById('evaluationResults').classList.remove('hidden');
+        document.getElementById('scorecardStatus').innerText = "AI Evaluated";
+        document.getElementById('scorecardStatus').className = "text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold";
+
+        evalBtn.disabled = false;
+        evalBtn.innerHTML = `<i class="fa-solid fa-brain"></i> <span>AI Score Answer</span>`;
+        showToast("Scorecard generated with personalized coaching tips!", "success");
+      }, 1000);
+    }
+
+    // Advance to next interview question
+    function nextInterviewQuestion() {
+      appState.currentInterviewIndex = (appState.currentInterviewIndex + 1) % interviewQuestions.length;
+      const q = interviewQuestions[appState.currentInterviewIndex];
+
+      document.getElementById('interviewQuestionNumber').innerText = `Question ${appState.currentInterviewIndex + 1} of 5`;
+      document.getElementById('currentQuestionText').innerText = `"${q.question}"`;
+      document.getElementById('candidateAnswerText').value = "";
+      
+      // Reset scorecard
+      document.getElementById('feedbackPlaceholder').classList.remove('hidden');
+      document.getElementById('evaluationResults').classList.add('hidden');
+      document.getElementById('scorecardStatus').innerText = "Awaiting Answer";
+      document.getElementById('scorecardStatus').className = "text-xs bg-slate-100 text-slate-500 px-2.5 py-0.5 rounded-full font-medium";
+
+      showToast(`Loaded Question ${appState.currentInterviewIndex + 1}`, "info");
+    }
+
+    // Simulated Text-to-speech for interview question
+    function readQuestionAloud() {
+      const question = document.getElementById('currentQuestionText').innerText;
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(question);
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+        showToast("Reading question aloud via browser TTS...", "info");
+      } else {
+        showToast("Audio playback simulated.", "info");
+      }
+    }
+
+    // Filter job opportunities
+    function filterOpportunities(type) {
+      const cards = document.querySelectorAll('#jobsGrid > div');
+      const buttons = document.querySelectorAll('.job-filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-600');
+      });
+      event.target.classList.add('bg-brand-600', 'text-white');
+
+      cards.forEach(card => {
+        const loc = card.getAttribute('data-location');
+        if (type === 'all' || loc === type) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Job Application Handlers
+    function applyJob(companyName) {
+      showToast(`Application and verified MargDarshak ERI Scorecard submitted to ${companyName}!`, 'success');
+    }
+
+    function bridgeModal(skill) {
+      document.getElementById('modalSkillName').innerText = skill;
+      document.getElementById('bridgeModal').classList.remove('hidden');
+    }
+
+    function closeBridgeModal() {
+      document.getElementById('bridgeModal').classList.add('hidden');
+    }
+
+    // Clean Toast message replacing default alert()
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.innerText = message;
+
+      if (type === 'success') {
+        toastIcon.className = "fa-solid fa-circle-check text-emerald-400";
+      } else if (type === 'warning') {
+        toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400";
+      } else {
+        toastIcon.className = "fa-solid fa-circle-info text-indigo-400";
+      }
+
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
