@@ -1,0 +1,24 @@
+ANSHU JHA
+Bengaluru, India | anshu.data@example.com | linkedin.com/in/anshujha
+
+OBJECTIVE
+Data-driven Computer Science undergraduate seeking a Data Analyst or Business Intelligence Internship to extract actionable insights, build automated ETL pipelines, and develop intuitive BI dashboards.
+
+EDUCATION
+B.Tech in Computer Science and Engineering (Expected 2026)
+GPA: 8.8 / 10.0
+
+CORE TECHNICAL COMPETENCIES
+- Programming: Python, SQL (PostgreSQL, BigQuery, MySQL), R basics
+- Data Analysis & Science: Pandas, NumPy, Scikit-learn, Exploratory Data Analysis (EDA)
+- Visualization & BI: Tableau, Power BI, Matplotlib, Seaborn
+- Techniques: A/B Testing, Cohort Analysis, Statistical Modeling, Hypothesis Testing
+
+PROJECT HIGHLIGHTS
+Customer Churn Prediction & Retention Analytics
+- Analyzed 100,000+ customer records to identify churn drivers with 87% predictive accuracy.
+- Built interactive Tableau dashboard tracking monthly active retention cohorts.
+
+E-Commerce Sales Performance Dashboard
+- Created automated SQL pipelines transforming daily transactional raw logs into executive KPI reports.
+- Uncovered high-margin product bundles leading to a projected 14% lift in cross-sell revenue.

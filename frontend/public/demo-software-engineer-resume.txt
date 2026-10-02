@@ -1,0 +1,31 @@
+ANSHU JHA
+Bengaluru, India | anshu.jha@example.com | linkedin.com/in/anshujha | github.com/anshujha
+
+OBJECTIVE
+Motivated Computer Science undergraduate aiming to contribute robust full-stack software engineering solutions, responsive Next.js web applications, and scalable backend services.
+
+EDUCATION
+B.Tech in Computer Science and Engineering (Expected 2026)
+GPA: 8.8 / 10.0
+
+TECHNICAL SKILLS
+- Languages: TypeScript, JavaScript (ES6+), SQL, Python
+- Frontend: React.js, Next.js 14, Tailwind CSS, HTML5, CSS3
+- Backend & DB: Node.js, Express.js, PostgreSQL, Prisma ORM, RESTful APIs
+- Tools: Git, GitHub, Postman, Vercel, VS Code
+
+EXPERIENCE
+Frontend Developer Intern | TechVanguard Labs (May 2024 - July 2024)
+- Architected responsive modular components using React and Tailwind CSS, increasing page load speed by 25%.
+- Implemented state management and optimized data-fetching patterns across 10+ web views.
+- Collaborated in an agile team of 5 engineers with weekly sprints and code reviews.
+
+PROJECTS
+CareerForge - AI Career Readiness & Placement Platform
+- Built full-stack dashboard featuring ATS resume parsing, skill gap analysis, and simulated mock interviews.
+- Integrated PostgreSQL with Prisma ORM for efficient relational user progress tracking.
+- Created dynamic milestone roadmaps with real-time completion state management.
+
+Scalable E-Commerce Storefront
+- Designed high-performance Next.js 14 web application featuring Server Actions and responsive UI.
+- Integrated Stripe payment test suite and reduced database query response times by 35%.
